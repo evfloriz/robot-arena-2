@@ -30,6 +30,8 @@ public class EnemyMovement : MonoBehaviour
     private bool shouldJump = false;
     private float moveDirection = 0.0f;
 
+    // test commit
+
 
     
     // Start is called before the first frame update
