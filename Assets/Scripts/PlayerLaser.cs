@@ -9,6 +9,17 @@ public class PlayerLaser : MonoBehaviour
 
     private float beamDrawOffset = 0.15f;
     private float hitDrawOffset = 0.25f;
+
+    private bool isShooting = false;
+    private float shotTimer = 0.0f;
+    private float shotTime = 0.1f;
+    private float shotDelay = 0.2f;
+
+    private bool shootInput = false;
+    private float shootInputTimer = 0.0f;
+    private float shootInputBuffer = 0.1f;
+
+    
     
     // Start is called before the first frame update
     void Start()
@@ -22,17 +33,44 @@ public class PlayerLaser : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButton("Fire1"))
+        // shoot input buffer
+        if (Input.GetButtonDown("Fire1"))
         {
-            Shoot();
-            // Debug.Log("shoot");
+            shootInput = true;
+            shootInputTimer = 0.0f;
         }
         else
         {
-            lineRenderer.enabled = false;
+            shootInputTimer += Time.deltaTime;
+            if (shootInputTimer > shootInputBuffer)
+                shootInput = false;
+        }
+        
+        // set shooting to true if input and not currently shooting
+        if (shootInput && isShooting == false)
+        {
+            // Debug.Log("shooting");
+            isShooting = true;
         }
 
-        
+        // if shooting, shoot for specified time and wait for specified time before stopping
+        if (isShooting)
+        {
+            if (shotTimer < shotTime)
+                Shoot();
+            else
+                lineRenderer.enabled = false;
+            
+            if (shotTimer > shotDelay)
+            {
+                shotTimer = 0.0f;
+                isShooting = false;
+                // Debug.Log("not shooting");
+            }
+
+            shotTimer += Time.deltaTime;
+
+        }   
     }
         
 
@@ -47,7 +85,10 @@ public class PlayerLaser : MonoBehaviour
         {
             // if ray hits enemy, have beam penetrate a little bit into the bounding box
             if (hit.collider.tag == "Enemy")
+            {
                 hitOffsetVector.x = transform.right.x * hitDrawOffset;
+                Debug.Log("enemy hit");
+            }
             
             Debug.DrawLine(transform.position + beamOffsetVector, hit.point, Color.red);
             lineRenderer.SetPosition(0, transform.position + beamOffsetVector);
@@ -68,7 +109,7 @@ public class PlayerLaser : MonoBehaviour
             Vector2 screenEdge = cam.ViewportToWorldPoint(new Vector2(viewportEdge, 0.0f));
             screenEdge.y = transform.position.y;
 
-            Debug.Log(screenEdge);
+            // Debug.Log(screenEdge);
 
             // fire laser
             Debug.DrawLine(transform.position + beamOffsetVector, screenEdge, Color.blue);
