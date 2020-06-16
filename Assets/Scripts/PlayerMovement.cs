@@ -1,54 +1,79 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody2D rb;
-    public BoxCollider2D bc;
-    
-    private Vector2 movement = new Vector2(0.0f, 0.0f);
+    public Animator animator;
+    public SpriteRenderer sr;
 
-    
-    private float axis = 0.0f;
-    private float sign = 0.0f;
+    public LayerMask groundLayer;
+
+    private GameObject laserSpawn;
 
     public float maxSpeed = 5.0f;
-    public float acceleration = 40.0f;
-    public float inAirAccelerationMultiplier = 2.0f;
-    private Vector2 horizontalAcceleration = new Vector2(0.0f, 0.0f);
-    private Vector2 horizonalVelocity = new Vector2(0.0f, 0.0f);
-    
-    
+    public float horizontalAcceleration = 80.0f;
+    public float horizontalFriction = 80.0f;
+    public float inAirAccelerationMultiplier = 1.0f;
+    public float maxFallSpeed = 20.0f;
+    public float jumpHeight = 3.0f;
+    public float peakTime = 0.5f;
+
+    private float inputAxis = 0.0f;
 
     private bool jumpInput = false;
     private float jumpBuffer = 0.2f;
     private float jumpTimer = 0.0f;
 
-    public float maxFallSpeed = 20.0f;
-    public float jumpHeight = 3.0f;
-    public float peakTime = 0.5f;
-    private Vector2 gravity = new Vector2(0.0f, 0.0f);
-    private Vector2 aerialVelocity = new Vector2(0.0f, 0.0f);
+    
+    private Vector2 movement = new Vector2(0.0f, 0.0f);
+    private Vector2 velocity = new Vector2(0.0f, 0.0f);
+    private Vector2 acceleration = new Vector2(0.0f, 0.0f);
+    
+    private bool isGroundedNextFrame = false;
+    private bool collisionHorizontal = false;
+    private bool collisionUp = false;
 
-    private float ground_y = 0.0f;
-    private bool isColliding = false;
+    private Vector2 originalExtents;
+    private Vector2 originalSpawnTransform;
+
+    
     
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        sr = GetComponent<SpriteRenderer>();
+
         rb.isKinematic = true;
+        acceleration.y = (-2 * jumpHeight) / (peakTime * peakTime);
+        originalExtents = sr.bounds.extents;
 
-        bc = GetComponent<BoxCollider2D>();
-
-        gravity.Set(0.0f, (-2 * jumpHeight) / (peakTime * peakTime));
+        laserSpawn = transform.Find("LaserSpawn").gameObject;
+        originalSpawnTransform = laserSpawn.transform.localPosition;
     }
     
     void Update()
     {
 
-        axis = Input.GetAxisRaw("Horizontal");
+        inputAxis = Input.GetAxisRaw("Horizontal");
+
+        // flip sprite
+        if (inputAxis == 1)
+        {
+            sr.flipX = false;
+            laserSpawn.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+            laserSpawn.transform.localPosition = new Vector2(originalSpawnTransform.x, originalSpawnTransform.y);
+
+        }
+        else if (inputAxis == -1)
+        {
+            sr.flipX = true;
+            laserSpawn.transform.localRotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
+            laserSpawn.transform.localPosition = new Vector2(-originalSpawnTransform.x, originalSpawnTransform.y);
+        }
+
+        animator.SetFloat("Speed", Mathf.Abs(inputAxis));
 
         if(Input.GetButtonDown("Jump"))
         {
@@ -63,108 +88,177 @@ public class PlayerMovement : MonoBehaviour
                 jumpInput=false;
         
         }
-            
+
+        
 
     }
     
     void FixedUpdate()
     {
+        UpdateMovement();
+
+        rb.MovePosition(rb.position + movement);        
+    }
+
+    void UpdateMovement()
+    {
         movement.Set(0.0f, 0.0f);
 
-        if(jumpInput)
+        // set properties that depend on if player is grounded
+        if (isGroundedNextFrame)
         {
-            jumpInput = false;
-            aerialVelocity.Set(0.0f, 2 * (jumpHeight) / (peakTime));
-        }
-        // else
-        // {
-        //     aerialVelocity.Set(0.0f, 0.0f);
-        // }
-
-        horizontalAcceleration.Set(acceleration, 0.0f);
-
-
-        // jump calculations
-        movement = movement + aerialVelocity * Time.deltaTime + 0.5f * gravity * Time.deltaTime * Time.deltaTime;
-        aerialVelocity = aerialVelocity + gravity * Time.deltaTime;
-        
-        if (aerialVelocity.y < -maxFallSpeed)
-            aerialVelocity.y = -maxFallSpeed;
-
-        
-
-        // run calculations
-        if (axis==0.0f)
-        {
-            if (horizonalVelocity.x > 0.0f)
-                sign = -1.0f;
-            else if (horizonalVelocity.x < 0.0f)
-                sign = 1.0f;
+            if(jumpInput)
+            {
+                jumpInput = false;
+                velocity.y = 2 * jumpHeight / peakTime;
+                
+                animator.SetBool("isJumping", true);
+            }
             else
-                sign = 0.0f;
+            {
+                velocity.y = 0.0f;
+            }
+
+            acceleration.x = horizontalAcceleration;
+            
+            animator.SetBool("isInAir", false);
         }
         else
-            sign = axis;
-
-        
-        movement = movement + horizonalVelocity * Time.deltaTime + sign * 0.5f * horizontalAcceleration * Time.deltaTime * Time.deltaTime;
-        horizonalVelocity = horizonalVelocity + sign * horizontalAcceleration * Time.deltaTime;
-        
-        if (horizonalVelocity.x > maxSpeed)
-            horizonalVelocity.x = maxSpeed;
-        if (horizonalVelocity.x < -maxSpeed)
-            horizonalVelocity.x = -maxSpeed;
-
-        if (axis == 0.0f && ((sign == 1.0f && horizonalVelocity.x > 0.0f) || (sign == -1.0f && horizonalVelocity.x < 0.0f)))
-            horizonalVelocity.x = 0.0f;    
-        
-
-
-        //Debug.Log(aerialVelocity);
-
-        if (isColliding)
         {
-            movement.y = ground_y - (bc.bounds.center.y-bc.bounds.extents.y);
-            isColliding=false;
+            acceleration.x = horizontalAcceleration*inAirAccelerationMultiplier;
+            
+            animator.SetBool("isInAir", true);
+            if (velocity.y < 0.0f)
+                animator.SetBool("isJumping", false);
         }
+            
+
+        // determine the correct acceleration.x value
+        if (inputAxis==0.0f)
+        {
+            if (velocity.x > 0.0f)
+                acceleration.x = -horizontalFriction;
+            else if (velocity.x < 0.0f)
+                acceleration.x = horizontalFriction;
+            else
+                acceleration.x = 0.0f;
+        }
+        else
+            acceleration.x = inputAxis * horizontalAcceleration;
         
         
-        Debug.Log(movement);
-
-
-
+        // apply movement
+        movement += velocity * Time.deltaTime + 0.5f * acceleration * Time.deltaTime * Time.deltaTime;
+        // Debug.Log(movement.ToString("F8"));
         
-        rb.MovePosition(rb.position + movement);
+        // calculate velocity for next frame
+        velocity += acceleration * Time.deltaTime;
+        
+        // cap move speed
+        if (velocity.x > maxSpeed)
+            velocity.x = maxSpeed;
+        if (velocity.x < -maxSpeed)
+            velocity.x = -maxSpeed;
+
+        // set move speed and acceleration to zero once the
+        // player has come to a stop (prevents going backward)
+        if (inputAxis == 0.0f && ((acceleration.x > 0.0f && velocity.x > 0.0f) || (acceleration.x < 0.0f && velocity.x < 0.0f)))
+        {
+            velocity.x = 0.0f;
+            acceleration.x = 0.0f;
+        }
+            
+        // cap fall speed
+        if (velocity.y < -maxFallSpeed)
+            velocity.y = -maxFallSpeed;
+                
+        // ground check for next frame
+        isGroundedNextFrame = RaycastCollision(Vector2.down);
+
+        // stop jumping animation if grounded next frame
+        if (isGroundedNextFrame)
+            animator.SetBool("isJumping", false);
+        
+        // upward collision
+        if (velocity.y > 0.0f)
+        {
+            collisionUp = RaycastCollision(Vector2.up);
+            if (collisionUp)
+            {
+                velocity.y = velocity.y/3.0f;
+                animator.SetBool("isJumping", false);
+            }
+        }
+
+        // horizontal collision
+        if (velocity.x >= 0.0f)
+            collisionHorizontal = RaycastCollision(Vector2.right);
+        
+        if (velocity.x <= 0.0f)
+            collisionHorizontal = RaycastCollision(Vector2.left);
+
+        if (collisionHorizontal)
+            velocity.x = 0.0f;
+
     }
 
-
-    void OnCollisionEnter2D(Collision2D collision)
+    
+    // raycasts in a specified direction
+    bool RaycastCollision(Vector2 direction)
     {
-        // for (int i=0; i<collision.contactCount; i++)
-        //     Debug.Log(collision.GetContact(i).point);
+        // sprite extents
+        Vector2 extents = originalExtents;
 
-        ground_y = collision.GetContact(0).point.y;
-        isColliding = true;
+        // offset is the location of start of the first raycast
+        // change is to iterate and space out the three raycasts
+        float offsetFactor = -0.3f;
+        float changeFactor = 0.66f;
+
+        Vector2 offset = new Vector2(0.0f,0.0f);
+        Vector2 change = new Vector2(0.0f,0.0f);
+
+        float distance = 0.0f;
         
+        // vertical raycasts
+        if (direction.x==0.0f)
+        {
+            offset.y = extents.y * offsetFactor * direction.y;
+            offset.x = -extents.x * changeFactor;
+            
+            change.x = extents.x * changeFactor;
+            
+            distance = extents.y + Mathf.Abs(offset.y);
+        }
+        // horizontal raycasts
+        else // direction.y==0.0f
+        {
+            offset.x = extents.x * offsetFactor * direction.x;
+            offset.y = -extents.y * changeFactor;
 
-        // Debug.Log(ground_y);
+            change.y = extents.y * changeFactor;
 
+            distance = extents.x + Mathf.Abs(offset.x);
+        }        
+
+        Vector2 drawDir = distance * direction;
+        Vector2 position = rb.position + movement;               // next frame
         
-    
+        for (int i=0; i<3; i++)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(position + offset, direction, distance, groundLayer);
+            Debug.DrawRay(rb.position+offset, drawDir, Color.blue);
+            
+            if (hit.collider != null)
+            {
+                Debug.DrawRay(position+offset, drawDir, Color.red);
+                movement = movement - direction * (distance-hit.distance);
+                // Debug.Log(distance-hit.distance);
+                return true;
+            }
+
+            offset = offset + change;
+        }
+
+        return false;
     }
-
-    void OnCollisionStay2D(Collision2D collision)
-    {
-
-        isColliding=true;
-
-        Debug.Log(movement);
-        
-
-        //Debug.Log(aerialVelocity.y);
-    }
-
-    
-
-    
 }

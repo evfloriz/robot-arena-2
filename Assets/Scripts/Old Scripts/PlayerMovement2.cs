@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewPlayerMovement : MonoBehaviour
+public class PlayerMovement2 : MonoBehaviour
 {
     public Rigidbody2D rb;
     public Animator animator;
