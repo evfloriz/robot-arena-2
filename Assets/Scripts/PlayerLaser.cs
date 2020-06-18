@@ -67,8 +67,6 @@ public class PlayerLaser : MonoBehaviour
             GameObject laser = Instantiate(laserPrefab, transform.position, transform.rotation);
             LaserObject laserObject = laser.GetComponent<LaserObject>();
             laserObject.Initialize(transform.parent.tag, laserSpeed, laserLength, laserDamage, laserColor);
-
-            Debug.Log(transform.parent.tag);
         }
     }
         
