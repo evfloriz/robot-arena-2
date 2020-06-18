@@ -17,6 +17,7 @@ public class PlayerLaser : MonoBehaviour
     private float laserSpeed = 16.0f;
     private float laserLength = 2.0f;
     private int laserDamage = 30;
+    private Color laserColor = new Color(255f/255f, 0f/255f, 77f/255f);
 
     
     
@@ -65,7 +66,7 @@ public class PlayerLaser : MonoBehaviour
         {
             GameObject laser = Instantiate(laserPrefab, transform.position, transform.rotation);
             LaserObject laserObject = laser.GetComponent<LaserObject>();
-            laserObject.Initialize(transform.parent.tag, laserSpeed, laserLength, laserDamage);
+            laserObject.Initialize(transform.parent.tag, laserSpeed, laserLength, laserDamage, laserColor);
 
             Debug.Log(transform.parent.tag);
         }
