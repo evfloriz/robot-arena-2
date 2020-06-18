@@ -30,7 +30,8 @@ public class EnemyMovement : MonoBehaviour
     private bool shouldJump = false;
     private float moveDirection = 0.0f;
 
-    // test commit
+    private GameObject laserSpawn;
+    private Vector2 originalSpawnTransform;
 
 
     
@@ -46,6 +47,9 @@ public class EnemyMovement : MonoBehaviour
         rb.isKinematic = true;
         gravity.y = (-2 * jumpHeight) / (peakTime * peakTime);
         originalExtents = sr.bounds.extents;
+
+        laserSpawn = transform.Find("LaserSpawn").gameObject;
+        originalSpawnTransform = laserSpawn.transform.localPosition;
     }
 
     // Update is called once per frame
@@ -58,11 +62,16 @@ public class EnemyMovement : MonoBehaviour
         {
             moveDirection = -1.0f;
             sr.flipX = true;
+            laserSpawn.transform.localRotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
+            laserSpawn.transform.localPosition = new Vector2(-originalSpawnTransform.x, originalSpawnTransform.y);
+            
         }
         else if (positionDifference < -2.0f)
         {
             moveDirection = 1.0f;
             sr.flipX = false;
+            laserSpawn.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+            laserSpawn.transform.localPosition = new Vector2(originalSpawnTransform.x, originalSpawnTransform.y);
         }
         else
             moveDirection = 0.0f;
