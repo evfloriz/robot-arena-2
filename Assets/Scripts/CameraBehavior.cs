@@ -7,8 +7,12 @@ public class CameraBehavior : MonoBehaviour
 {
     private Transform playerTransform;
     private TilemapRenderer background;
-    private float verticalExtent;
-    private float horizontalExtent;
+    
+    private Vector2 bottomLeftBound;
+    private Vector2 topRightBound;
+
+    private float verticalCamExtent;
+    private float horizontalCamExtent;
 
     private Camera mainCamera;
     
@@ -18,24 +22,28 @@ public class CameraBehavior : MonoBehaviour
         playerTransform = GameObject.FindWithTag("Player").transform;
         background = GameObject.FindWithTag("Background").GetComponent<TilemapRenderer>();
 
-        Debug.Log(background.bounds.extents);
+        bottomLeftBound = background.bounds.center - background.bounds.extents;
+        topRightBound = background.bounds.center + background.bounds.extents;
+
+        Debug.Log(bottomLeftBound);
+        Debug.Log(topRightBound);
+
 
         mainCamera = Camera.main;
-
-        verticalExtent = background.bounds.extents.y - mainCamera.orthographicSize;
-        horizontalExtent = background.bounds.extents.x - mainCamera.orthographicSize * mainCamera.aspect;
-
-        Debug.Log(verticalExtent);
-        Debug.Log(horizontalExtent);
-        
     }
 
     // Update is called once per frame
     void Update()
     {
+        verticalCamExtent = mainCamera.orthographicSize;
+        horizontalCamExtent = mainCamera.orthographicSize * mainCamera.aspect;
+
+        // Debug.Log(verticalCamExtent);
+        // Debug.Log(horizontalCamExtent);
+
         transform.position = new Vector3(
-            Mathf.Clamp(playerTransform.position.x, -horizontalExtent, horizontalExtent),
-            Mathf.Clamp(playerTransform.position.y, -verticalExtent, verticalExtent),
+            Mathf.Clamp(playerTransform.position.x, bottomLeftBound.x + horizontalCamExtent, topRightBound.x - horizontalCamExtent),
+            Mathf.Clamp(playerTransform.position.y, bottomLeftBound.y + verticalCamExtent, topRightBound.y - verticalCamExtent),
             transform.position.z);
     }
 }
