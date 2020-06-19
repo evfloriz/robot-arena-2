@@ -5,24 +5,57 @@ using UnityEngine;
 public class EnemyHitBehavior : MonoBehaviour
 {
     private int health = 100;
+
+    private float invincibleTimer = 0.0f;
+    private float invincibleTime = 0.3f;
+    private bool isInvincible = false;
+
+    private SpriteRenderer spriteRenderer;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (isInvincible)
+        {
+            invincibleTimer += Time.deltaTime;
+
+            // blink sprite
+            if (invincibleTimer % 0.1f < 0.05f)
+                spriteRenderer.enabled = false;
+            else
+                spriteRenderer.enabled = true;
+            
+            // end invincibility period
+            if (invincibleTimer > invincibleTime)
+            {
+                invincibleTimer = 0.0f;
+                isInvincible = false;
+                spriteRenderer.enabled = true;
+            }
+
+            
+
+        }
+
+        // Debug.Log(isInvincible);
     }
 
     public void TakeDamage(int damage)
     {
-        health -= damage;
-        if (health <= 0)
-            Destroy(gameObject);
+        if (!isInvincible)
+        {
+            isInvincible = true;
+            health -= damage;
+            if (health <= 0)
+                Destroy(gameObject);
+        }
 
     }
+
 }

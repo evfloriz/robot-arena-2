@@ -16,7 +16,7 @@ public class PlayerLaser : MonoBehaviour
 
     private float laserSpeed = 16.0f;
     private float laserLength = 2.0f;
-    private int laserDamage = 30;
+    private int laserDamage = 34;
     private Color laserColor = new Color(255f/255f, 0f/255f, 77f/255f);
 
     
