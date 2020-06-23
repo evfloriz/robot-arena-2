@@ -33,6 +33,8 @@ public class EnemyMovement : MonoBehaviour
     private GameObject laserSpawn;
     private Vector2 originalSpawnTransform;
 
+    private float deadzone = 2.0f;
+
 
     
     // Start is called before the first frame update
@@ -58,23 +60,25 @@ public class EnemyMovement : MonoBehaviour
         float positionDifference = transform.position.x - player.transform.position.x;
 
         // change direction and flip sprite based on position relative to player
-        if (positionDifference > 2.0f)
+        moveDirection = 0.0f;
+        if (positionDifference > 0.0f)
         {
-            moveDirection = -1.0f;
             sr.flipX = true;
             laserSpawn.transform.localRotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
             laserSpawn.transform.localPosition = new Vector2(-originalSpawnTransform.x, originalSpawnTransform.y);
+            if (positionDifference > deadzone)
+                moveDirection = -1.0f;
             
         }
-        else if (positionDifference < -2.0f)
+        else
         {
-            moveDirection = 1.0f;
             sr.flipX = false;
             laserSpawn.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
             laserSpawn.transform.localPosition = new Vector2(originalSpawnTransform.x, originalSpawnTransform.y);
+            if (positionDifference < -deadzone)
+                moveDirection = 1.0f;
         }
-        else
-            moveDirection = 0.0f;
+            
 
         animator.SetFloat("Speed", Mathf.Abs(moveDirection));
 
