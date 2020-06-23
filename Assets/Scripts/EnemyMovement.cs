@@ -8,7 +8,8 @@ public class EnemyMovement : MonoBehaviour
     public Animator animator;
     public SpriteRenderer sr;
 
-    public GameObject player;
+    private Transform playerTransform;
+    private Vector3 positionToFollow;
 
     public LayerMask groundLayer;
 
@@ -44,7 +45,7 @@ public class EnemyMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
 
-        player = GameObject.FindWithTag("Player");
+        playerTransform = GameObject.FindWithTag("Player").transform;
 
         rb.isKinematic = true;
         gravity.y = (-2 * jumpHeight) / (peakTime * peakTime);
@@ -57,7 +58,10 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float positionDifference = transform.position.x - player.transform.position.x;
+        if (playerTransform != null)
+            positionToFollow = playerTransform.position;
+
+        float positionDifference = transform.position.x - positionToFollow.x;
 
         // change direction and flip sprite based on position relative to player
         moveDirection = 0.0f;

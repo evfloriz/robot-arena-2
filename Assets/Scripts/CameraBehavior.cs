@@ -14,6 +14,8 @@ public class CameraBehavior : MonoBehaviour
     private float verticalCamExtent;
     private float horizontalCamExtent;
 
+    private Vector3 positionToFollow;
+
     private Camera mainCamera;
     
     // Start is called before the first frame update
@@ -35,6 +37,9 @@ public class CameraBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (playerTransform != null)
+            positionToFollow = playerTransform.position;
+        
         verticalCamExtent = mainCamera.orthographicSize;
         horizontalCamExtent = mainCamera.orthographicSize * mainCamera.aspect;
 
@@ -42,8 +47,8 @@ public class CameraBehavior : MonoBehaviour
         // Debug.Log(horizontalCamExtent);
 
         transform.position = new Vector3(
-            Mathf.Clamp(playerTransform.position.x, bottomLeftBound.x + horizontalCamExtent, topRightBound.x - horizontalCamExtent),
-            Mathf.Clamp(playerTransform.position.y, bottomLeftBound.y + verticalCamExtent, topRightBound.y - verticalCamExtent),
+            Mathf.Clamp(positionToFollow.x, bottomLeftBound.x + horizontalCamExtent, topRightBound.x - horizontalCamExtent),
+            Mathf.Clamp(positionToFollow.y, bottomLeftBound.y + verticalCamExtent, topRightBound.y - verticalCamExtent),
             transform.position.z);
     }
 }
