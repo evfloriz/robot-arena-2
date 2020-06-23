@@ -51,9 +51,9 @@ public class LaserObject : MonoBehaviour
                 // make sure enemy didn't fire laser
                 if (type != "Enemy")
                 {
+                    // Debug.Log("hit enemy");
                     EnemyHitBehavior enemy = hit.collider.GetComponent<EnemyHitBehavior>();
                     enemy.TakeDamage(damage);
-                    Debug.Log("hit enemy");
                 }
                 else
                     hitHasOccurred = false;
@@ -64,7 +64,9 @@ public class LaserObject : MonoBehaviour
                 // make sure player didn't fire laser
                 if (type != "Player")
                 {
-                    Debug.Log("hit player");
+                    //Debug.Log("hit player");
+                    PlayerHitBehavior player = hit.collider.GetComponent<PlayerHitBehavior>();
+                    player.TakeDamage(damage);
                 }
                 else
                     hitHasOccurred = false;

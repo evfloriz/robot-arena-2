@@ -11,7 +11,7 @@ public class EnemyLaser : MonoBehaviour
     
     private float laserSpeed = 6.0f;
     private float laserLength = 1.0f;
-    private int laserDamage = 30;
+    private int laserDamage = 1;
     private Color laserColor = new Color(255f/255f, 163f/255f, 0f/255f);
     
     // Start is called before the first frame update

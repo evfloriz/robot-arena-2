@@ -25,8 +25,8 @@ public class CameraBehavior : MonoBehaviour
         bottomLeftBound = background.bounds.center - background.bounds.extents;
         topRightBound = background.bounds.center + background.bounds.extents;
 
-        Debug.Log(bottomLeftBound);
-        Debug.Log(topRightBound);
+        // Debug.Log(bottomLeftBound);
+        // Debug.Log(topRightBound);
 
 
         mainCamera = Camera.main;

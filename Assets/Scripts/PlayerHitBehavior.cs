@@ -1,26 +1,39 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class EnemyHitBehavior : MonoBehaviour
+public class PlayerHitBehavior : MonoBehaviour
 {
-    private int health = 3;
+    private int maxHealth = 3;
+    private int health;
+
+    private int lives = 3;
 
     private float invincibleTimer = 0.0f;
-    private float invincibleTime = 0.3f;
+    private float invincibleTime = 0.5f;
     private bool isInvincible = false;
 
     private SpriteRenderer spriteRenderer;
+
+    public Image[] hearts;
+    public Image livesTextImage;
+
+    public Sprite[] numbers;
     
     // Start is called before the first frame update
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        health = maxHealth;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (lives == 0)
+            Destroy(gameObject);
+        
         if (isInvincible)
         {
             invincibleTimer += Time.deltaTime;
@@ -39,11 +52,33 @@ public class EnemyHitBehavior : MonoBehaviour
                 spriteRenderer.enabled = true;
             }
 
-            
-
         }
 
+        
+        
+        DisplayHearts();
+        DisplayLives();
+        
         // Debug.Log(isInvincible);
+    }
+
+    void DisplayHearts()
+    {
+        for (int i=0; i<maxHealth; i++)
+        {
+            if (i<health)
+                hearts[i].enabled = true;
+            else
+                hearts[i].enabled = false;
+        }
+    }
+
+    void DisplayLives()
+    {
+        if (lives > 0)
+            livesTextImage.sprite = numbers[lives-1];
+        else
+            Debug.Log("Lives out of range");
     }
 
     public void TakeDamage(int damage)
@@ -52,10 +87,13 @@ public class EnemyHitBehavior : MonoBehaviour
         {
             isInvincible = true;
             health -= damage;
+            // Debug.Log(health);
             if (health <= 0)
-                Destroy(gameObject);
+            {
+                lives--;
+                health = maxHealth;
+            }
         }
 
     }
-
 }
