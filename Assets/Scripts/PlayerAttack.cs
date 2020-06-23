@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerLaser : MonoBehaviour
+public class PlayerAttack : MonoBehaviour
 {   
     private bool isShooting = false;
     private float shotTimer = 0.0f;
@@ -19,11 +19,16 @@ public class PlayerLaser : MonoBehaviour
     private int laserDamage = 1;
     private Color laserColor = new Color(255f/255f, 0f/255f, 77f/255f);
 
+    private Transform laserSpawnTransform;
+
     
     
     // Start is called before the first frame update
     void Start()
     {
+        laserSpawnTransform = transform.Find("LaserSpawn");
+        if (laserSpawnTransform == null)
+            laserSpawnTransform = transform;
         
     }
 
@@ -64,9 +69,9 @@ public class PlayerLaser : MonoBehaviour
 
         void Shoot()
         {
-            GameObject laser = Instantiate(laserPrefab, transform.position, transform.rotation);
+            GameObject laser = Instantiate(laserPrefab, laserSpawnTransform.position, laserSpawnTransform.rotation);
             LaserObject laserObject = laser.GetComponent<LaserObject>();
-            laserObject.Initialize(transform.parent.tag, laserSpeed, laserLength, laserDamage, laserColor);
+            laserObject.Initialize(gameObject.tag, laserSpeed, laserLength, laserDamage, laserColor);
         }
     }
         

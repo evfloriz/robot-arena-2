@@ -181,6 +181,7 @@ GameObject:
   - component: {fileID: 196385940}
   - component: {fileID: 196385941}
   - component: {fileID: 196385942}
+  - component: {fileID: 196385943}
   m_Layer: 0
   m_Name: Enemy 1
   m_TagString: Enemy
@@ -284,7 +285,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -315,7 +316,6 @@ MonoBehaviour:
   rb: {fileID: 0}
   animator: {fileID: 0}
   sr: {fileID: 0}
-  player: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -354,6 +354,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04b3555343874d6409cc8f2e201ed92f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &196385943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 196385935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30996843601925e42be5e6de9c86814e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  laserPrefab: {fileID: 5569488312476846512, guid: 7e549d79cc1b0564bb1061eb108f565e,
+    type: 3}
 --- !u!1 &267635446
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,8 +378,6 @@ GameObject:
   m_Component:
   - component: {fileID: 267635447}
   - component: {fileID: 267635448}
-  - component: {fileID: 267635449}
-  - component: {fileID: 267635450}
   m_Layer: 0
   m_Name: LaserSpawn
   m_TagString: Untagged
@@ -484,32 +496,6 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!114 &267635449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 267635446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22781169d4c635348aa1f141e326562b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  laserPrefab: {fileID: 5569488312476846512, guid: 7e549d79cc1b0564bb1061eb108f565e,
-    type: 3}
---- !u!114 &267635450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 267635446}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adaed3a6f559bdc48b4e266c408a2cf1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &365221023
 GameObject:
   m_ObjectHideFlags: 0
@@ -862,8 +848,6 @@ GameObject:
   m_Component:
   - component: {fileID: 781837670}
   - component: {fileID: 781837671}
-  - component: {fileID: 781837672}
-  - component: {fileID: 781837673}
   m_Layer: 0
   m_Name: LaserSpawn
   m_TagString: Untagged
@@ -982,32 +966,6 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!114 &781837672
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 781837669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30996843601925e42be5e6de9c86814e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  laserPrefab: {fileID: 5569488312476846512, guid: 7e549d79cc1b0564bb1061eb108f565e,
-    type: 3}
---- !u!114 &781837673
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 781837669}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adaed3a6f559bdc48b4e266c408a2cf1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1066233395
 GameObject:
   m_ObjectHideFlags: 0
@@ -1652,6 +1610,7 @@ GameObject:
   - component: {fileID: 1630107517}
   - component: {fileID: 1630107518}
   - component: {fileID: 1630107515}
+  - component: {fileID: 1630107516}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1743,7 +1702,7 @@ Rigidbody2D:
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 1
-  m_SleepingMode: 1
+  m_SleepingMode: 0
   m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!61 &1630107514
@@ -1756,7 +1715,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1800,6 +1759,20 @@ MonoBehaviour:
   - {fileID: -5409966254580451459, guid: aecef0eb7730aee479174849f1d4921f, type: 3}
   - {fileID: -3721465067583631501, guid: aecef0eb7730aee479174849f1d4921f, type: 3}
   - {fileID: -674427202720082244, guid: aecef0eb7730aee479174849f1d4921f, type: 3}
+--- !u!114 &1630107516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1630107510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22781169d4c635348aa1f141e326562b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  laserPrefab: {fileID: 5569488312476846512, guid: 7e549d79cc1b0564bb1061eb108f565e,
+    type: 3}
 --- !u!95 &1630107517
 Animator:
   serializedVersion: 3
