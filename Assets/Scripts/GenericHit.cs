@@ -6,7 +6,7 @@ using UnityEngine;
 // called by Laser prefab
 // allows hit behavior to be unique for each enemy
 
-public class EnemyHit : MonoBehaviour
+public class GenericHit : MonoBehaviour
 {
     private bool isHit = false;
     private int damage = 0;

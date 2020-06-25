@@ -45,33 +45,33 @@ public class LaserObject : MonoBehaviour
         {
             hitHasOccurred = true;
 
-            // enemy collision
-            if (hit.collider.tag == "Enemy")
+            // enemy or player collision
+            if (hit.collider.tag == "Enemy" || hit.collider.tag == "Player")
             {
                 // make sure enemy didn't fire laser
-                if (type != "Enemy")
+                if (hit.collider.tag != type)
                 {
                     // Debug.Log("hit enemy");
-                    EnemyHit enemy = hit.collider.GetComponent<EnemyHit>();
-                    enemy.SetHit(true, damage);
+                    GenericHit genericHit = hit.collider.GetComponent<GenericHit>();
+                    genericHit.SetHit(true, damage);
                 }
                 else
                     hitHasOccurred = false;
             }
-            // player collision
-            else if (hit.collider.tag == "Player")
-            {
-                // make sure player didn't fire laser
-                if (type != "Player")
-                {
-                    //Debug.Log("hit player");
-                    PlayerHitBehavior player = hit.collider.GetComponent<PlayerHitBehavior>();
-                    player.TakeDamage(damage);
-                }
-                else
-                    hitHasOccurred = false;
+            // // player collision
+            // else if (hit.collider.tag == "Player")
+            // {
+            //     // make sure player didn't fire laser
+            //     if (type != "Player")
+            //     {
+            //         //Debug.Log("hit player");
+            //         PlayerHitBehavior player = hit.collider.GetComponent<PlayerHitBehavior>();
+            //         player.TakeDamage(damage);
+            //     }
+            //     else
+            //         hitHasOccurred = false;
 
-            }
+            // }
 
             if (hitHasOccurred)
                 Destroy(gameObject);

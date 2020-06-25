@@ -53,7 +53,7 @@ public class EnemyAttack : MonoBehaviour
         // Debug.Log(other.gameObject.tag);
         if (other.gameObject.tag == "Player")
         {
-            other.gameObject.GetComponent<PlayerHitBehavior>().TakeDamage(contactDamage);
+            other.gameObject.GetComponent<GenericHit>().SetHit(true, contactDamage);
         }
 
     }

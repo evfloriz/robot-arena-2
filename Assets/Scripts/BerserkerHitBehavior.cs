@@ -11,13 +11,13 @@ public class BerserkerHitBehavior : MonoBehaviour
     private bool isInvincible = false;
 
     private SpriteRenderer spriteRenderer;
-    private EnemyHit enemyHit;
+    private GenericHit hit;
     
     // Start is called before the first frame update
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        enemyHit = GetComponent<EnemyHit>();
+        hit = GetComponent<GenericHit>();
     }
 
     // Update is called once per frame
@@ -44,10 +44,10 @@ public class BerserkerHitBehavior : MonoBehaviour
         }
 
         // handle hit
-        if (enemyHit.IsHit())
+        if (hit.IsHit())
         {
-            TakeDamage(enemyHit.GetDamage());
-            enemyHit.SetHit(false);
+            TakeDamage(hit.GetDamage());
+            hit.SetHit(false);
         }
 
         // Debug.Log(isInvincible);

@@ -20,20 +20,26 @@ public class PlayerHitBehavior : MonoBehaviour
     public Image livesTextImage;
 
     public Sprite[] numbers;
+
+    private GenericHit hit;
     
     // Start is called before the first frame update
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         health = maxHealth;
+
+        hit = GetComponent<GenericHit>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        // handle game over
         if (lives == 0)
             Destroy(gameObject);
         
+        // handle invincibility
         if (isInvincible)
         {
             invincibleTimer += Time.deltaTime;
@@ -54,8 +60,15 @@ public class PlayerHitBehavior : MonoBehaviour
 
         }
 
+        // handle hit
+        if (hit.IsHit())
+        {
+            TakeDamage(hit.GetDamage());
+            hit.SetHit(false);
+        }
+
         
-        
+        // display canvas information
         DisplayHearts();
         DisplayLives();
         
