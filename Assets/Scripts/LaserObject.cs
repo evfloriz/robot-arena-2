@@ -52,8 +52,8 @@ public class LaserObject : MonoBehaviour
                 if (type != "Enemy")
                 {
                     // Debug.Log("hit enemy");
-                    EnemyHitBehavior enemy = hit.collider.GetComponent<EnemyHitBehavior>();
-                    enemy.TakeDamage(damage);
+                    EnemyHit enemy = hit.collider.GetComponent<EnemyHit>();
+                    enemy.SetHit(true, damage);
                 }
                 else
                     hitHasOccurred = false;

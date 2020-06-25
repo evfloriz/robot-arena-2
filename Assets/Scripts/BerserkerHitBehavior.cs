@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyHitBehavior : MonoBehaviour
+public class BerserkerHitBehavior : MonoBehaviour
 {
     private int health = 3;
 
@@ -50,6 +50,7 @@ public class EnemyHitBehavior : MonoBehaviour
             enemyHit.SetHit(false);
         }
 
+        // Debug.Log(isInvincible);
     }
 
     public void TakeDamage(int damage)
