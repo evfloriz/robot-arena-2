@@ -17,6 +17,8 @@ public class BerserkerAttack : MonoBehaviour
     private int contactDamage = 1;
 
     private Transform laserSpawnTransform;
+
+    private BerserkerHitBehavior hitBehavior;
     
     // Start is called before the first frame update
     void Start()
@@ -25,19 +27,25 @@ public class BerserkerAttack : MonoBehaviour
         if (laserSpawnTransform == null)
             laserSpawnTransform = transform;
 
+        hitBehavior = GetComponent<BerserkerHitBehavior>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (shotTimer > shotDelay)
+        // only shoot if enemy is not berserk
+        if (!hitBehavior.IsBerserk())
         {
-            Shoot();
-            shotTimer = 0.0f;
-            // Debug.Log("shooting");
+            if (shotTimer > shotDelay)
+            {
+                Shoot();
+                shotTimer = 0.0f;
+                // Debug.Log("shooting");
+            }
+            
+            shotTimer += Time.deltaTime;
         }
-        
-        shotTimer += Time.deltaTime;
     }
 
     void Shoot()

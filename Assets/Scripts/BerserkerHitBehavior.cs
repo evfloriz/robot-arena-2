@@ -12,6 +12,9 @@ public class BerserkerHitBehavior : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
     private GenericHit hit;
+
+    private bool isBerserk = false;
+    private int berserkThreshold = 2;
     
     // Start is called before the first frame update
     void Start()
@@ -50,7 +53,6 @@ public class BerserkerHitBehavior : MonoBehaviour
             hit.SetHit(false);
         }
 
-        // Debug.Log(isInvincible);
     }
 
     public void TakeDamage(int damage)
@@ -61,8 +63,15 @@ public class BerserkerHitBehavior : MonoBehaviour
             health -= damage;
             if (health <= 0)
                 Destroy(gameObject);
+            if (health <= berserkThreshold)
+                isBerserk = true;
         }
 
+    }
+
+    public bool IsBerserk()
+    {
+        return isBerserk;
     }
 
 }

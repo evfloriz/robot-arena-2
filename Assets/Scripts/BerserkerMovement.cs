@@ -36,6 +36,10 @@ public class BerserkerMovement : MonoBehaviour
 
     private float deadzone = 2.0f;
 
+    private BerserkerHitBehavior hitBehavior;
+    private float berserkSpeed = 4.0f;
+    private float berserkDeadzone = 0.5f;
+
 
     
     // Start is called before the first frame update
@@ -53,17 +57,31 @@ public class BerserkerMovement : MonoBehaviour
 
         laserSpawn = transform.Find("LaserSpawn").gameObject;
         originalSpawnTransform = laserSpawn.transform.localPosition;
+
+        hitBehavior = GetComponent<BerserkerHitBehavior>();
+        animator.SetBool("IsBerserk", false);
     }
 
     // Update is called once per frame
     void Update()
     {
+        // update speed and deadzone if enemy is berserk
+        if (hitBehavior.IsBerserk())
+        {
+            maxSpeed = berserkSpeed;
+            deadzone = berserkDeadzone;
+
+            animator.SetBool("IsBerserk", true);
+        }
+        
+        
         if (playerTransform != null)
             positionToFollow = playerTransform.position;
 
         float positionDifference = transform.position.x - positionToFollow.x;
 
         // change direction and flip sprite based on position relative to player
+        // change laser spawn position based on direction
         moveDirection = 0.0f;
         if (positionDifference > 0.0f)
         {

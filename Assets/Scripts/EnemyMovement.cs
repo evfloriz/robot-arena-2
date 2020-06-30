@@ -34,7 +34,7 @@ public class EnemyMovement : MonoBehaviour
     private GameObject laserSpawn;
     private Vector2 originalSpawnTransform;
 
-    private float deadzone = 2.0f;
+    private float deadzone = 3.0f;
 
 
     
