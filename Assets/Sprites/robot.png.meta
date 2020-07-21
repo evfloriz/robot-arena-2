@@ -35,6 +35,18 @@ TextureImporter:
   - first:
       213: 5211804324953743716
     second: robot_10
+  - first:
+      213: -1452765673498839341
+    second: robot_11
+  - first:
+      213: -3897745586813925802
+    second: robot_12
+  - first:
+      213: 1943004679998842890
+    second: robot_13
+  - first:
+      213: -2030800898977521404
+    second: robot_14
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -233,7 +245,7 @@ TextureImporter:
         width: 24
         height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -254,7 +266,7 @@ TextureImporter:
         width: 24
         height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -267,36 +279,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: robot_7
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 40
-        width: 24
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: aebb6bf61e7b9c380800000000000000
-      internalID: -8950420605552378902
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: robot_8
       rect:
         serializedVersion: 2
         x: 0
-        y: 4
+        y: 8
         width: 24
-        height: 28
+        height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -313,11 +304,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 32
-        y: 4
+        y: 8
         width: 24
-        height: 28
+        height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -334,11 +325,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 64
-        y: 4
+        y: 8
         width: 24
-        height: 28
+        height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
