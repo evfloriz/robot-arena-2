@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class hfPickup : MonoBehaviour
+public class HoverPickup : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -24,7 +24,7 @@ public class hfPickup : MonoBehaviour
             
             if (playerManager != null)
             {
-                playerManager.ObtainHoverFeet();
+                playerManager.ObtainHover();
             }
 
             Destroy(gameObject);

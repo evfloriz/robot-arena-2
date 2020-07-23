@@ -6,7 +6,8 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager instance = null;
 
-    private bool hoverFeet = false;
+    private bool hover = false;
+    private bool dash = false;
     
     void Awake()
     {
@@ -24,9 +25,15 @@ public class PlayerManager : MonoBehaviour
         Debug.Log("test");
     }
 
-    public void ObtainHoverFeet()
+    public void ObtainHover()
     {
-        hoverFeet = true;
-        Debug.Log(hoverFeet);
+        hover = true;
+        Debug.Log("hover feet acquired");
+    }
+
+    public void ObtainDash()
+    {
+        dash = true;
+        Debug.Log("dash core acquired");
     }
 }

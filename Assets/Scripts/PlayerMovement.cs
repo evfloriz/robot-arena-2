@@ -58,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
 
         inputAxis = Input.GetAxisRaw("Horizontal");
 
-        // flip sprite
+        // flip sprite and laserSpawn position
         if (inputAxis == 1)
         {
             sr.flipX = false;
@@ -75,6 +75,8 @@ public class PlayerMovement : MonoBehaviour
 
         animator.SetFloat("Speed", Mathf.Abs(inputAxis));
 
+        // jump input buffering
+        /*
         if(Input.GetButtonDown("Jump"))
         {
             jumpInput = true;
@@ -88,6 +90,12 @@ public class PlayerMovement : MonoBehaviour
                 jumpInput=false;
         
         }
+        */
+
+        jumpInput = Input.GetButton("Jump");
+        //Debug.Log(jumpInput);
+        //Debug.Log(isGroundedNextFrame);
+
 
         
 
