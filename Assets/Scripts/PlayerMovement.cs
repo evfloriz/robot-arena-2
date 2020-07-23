@@ -313,7 +313,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isGroundedNextFrame)
         {
-            if (canHover && jumpInput)
+            if (canHover && jumpInput && hoverTimer < hoverTime)
             {
                 // hover
                 Debug.Log("hovering");
@@ -327,10 +327,6 @@ public class PlayerMovement : MonoBehaviour
 
                 hoverTimer += Time.deltaTime;
                 
-                if (hoverTimer > hoverTime)
-                {
-                    canHover = false;
-                }
             }
             else
             {
