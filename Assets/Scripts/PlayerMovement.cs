@@ -36,6 +36,13 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 originalExtents;
     private Vector2 originalSpawnTransform;
 
+    private PlayerManager playerManager;
+    
+    private float hoverTimer;
+    private float hoverTime = 1.0f;
+    private bool isJumpReleased = true;
+    private bool canHover = false;
+
     
     
 
@@ -51,6 +58,8 @@ public class PlayerMovement : MonoBehaviour
 
         laserSpawn = transform.Find("LaserSpawn").gameObject;
         originalSpawnTransform = laserSpawn.transform.localPosition;
+
+        playerManager = PlayerManager.instance.GetComponent<PlayerManager>();
     }
     
     void Update()
@@ -92,7 +101,27 @@ public class PlayerMovement : MonoBehaviour
         }
         */
 
+        bool lastJumpInput = jumpInput;
+    
         jumpInput = Input.GetButton("Jump");
+
+
+        // if jumpInput is true in one frame and false in the next, jump is released
+        if (lastJumpInput && !jumpInput)
+        {
+            //jump released
+            isJumpReleased = true;
+            canHover = true;
+            //Debug.Log(canHover);
+        }
+        else if (jumpInput)
+        {
+            isJumpReleased = false;
+            //Debug.Log(isJumpReleased);
+        }
+
+        // if jump is released, jumpInput is valid
+        
         //Debug.Log(jumpInput);
         //Debug.Log(isGroundedNextFrame);
 
@@ -104,6 +133,8 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         UpdateMovement();
+
+        HoverMovement();
 
         rb.MovePosition(rb.position + movement);        
     }
@@ -117,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if(jumpInput)
             {
-                jumpInput = false;
+                //isJumpReleased = false;
                 velocity.y = 2 * jumpHeight / peakTime;
                 
                 animator.SetBool("isJumping", true);
@@ -268,5 +299,32 @@ public class PlayerMovement : MonoBehaviour
         }
 
         return false;
+    }
+
+    // calculate hover movement
+    void HoverMovement()
+    {
+        if (!isGroundedNextFrame)
+        {
+            if (canHover && jumpInput)
+            {
+                // hover
+                Debug.Log("hovering");
+                hoverTimer += Time.deltaTime;
+                
+                if (hoverTimer > hoverTime)
+                {
+                    canHover = false;
+                }
+            }
+        }
+        else
+        {
+            hoverTimer = 0.0f;
+            canHover = false;
+        }
+
+        //Debug.Log(canHover);
+        
     }
 }
