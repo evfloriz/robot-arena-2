@@ -181,6 +181,9 @@ MonoBehaviour:
   maxFallSpeed: 20
   jumpHeight: 3
   peakTime: 0.5
+  hoverTime: 0.5
+  hoverSpeedCap: 5
+  hoverAcceleration: 25
 --- !u!114 &697723412452765492
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -36,4 +36,14 @@ public class PlayerManager : MonoBehaviour
         dash = true;
         Debug.Log("dash core acquired");
     }
+
+    public bool HoverObtained()
+    {
+        return hover;
+    }
+
+    public bool DashObtained()
+    {
+        return dash;
+    }
 }

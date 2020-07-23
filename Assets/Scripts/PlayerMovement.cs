@@ -39,9 +39,13 @@ public class PlayerMovement : MonoBehaviour
     private PlayerManager playerManager;
     
     private float hoverTimer;
-    private float hoverTime = 1.0f;
     private bool isJumpReleased = true;
     private bool canHover = false;
+    public float hoverTime = 0.5f;
+    public float hoverSpeedCap = 5.0f;
+    public float hoverAcceleration = 25.0f;
+
+    private float gravity;
 
     
     
@@ -53,7 +57,9 @@ public class PlayerMovement : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
 
         rb.isKinematic = true;
-        acceleration.y = (-2 * jumpHeight) / (peakTime * peakTime);
+        gravity = (-2 * jumpHeight) / (peakTime * peakTime);
+        acceleration.y = gravity;
+        
         originalExtents = sr.bounds.extents;
 
         laserSpawn = transform.Find("LaserSpawn").gameObject;
@@ -106,8 +112,8 @@ public class PlayerMovement : MonoBehaviour
         jumpInput = Input.GetButton("Jump");
 
 
-        // if jumpInput is true in one frame and false in the next, jump is released
-        if (lastJumpInput && !jumpInput)
+        // if jumpInput is not pressed while player is in air, hovering enabled
+        if (!isGroundedNextFrame && !jumpInput)
         {
             //jump released
             isJumpReleased = true;
@@ -134,7 +140,8 @@ public class PlayerMovement : MonoBehaviour
     {
         UpdateMovement();
 
-        HoverMovement();
+        if (playerManager.HoverObtained())
+            UpdateHoverMovement();
 
         rb.MovePosition(rb.position + movement);        
     }
@@ -302,7 +309,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // calculate hover movement
-    void HoverMovement()
+    void UpdateHoverMovement()
     {
         if (!isGroundedNextFrame)
         {
@@ -310,12 +317,25 @@ public class PlayerMovement : MonoBehaviour
             {
                 // hover
                 Debug.Log("hovering");
+                animator.SetBool("isHovering", true);
+                animator.SetBool("isJumping", false);
+                acceleration.y = hoverAcceleration;
+
+                // cap hover speed
+                if (velocity.y > hoverSpeedCap)
+                    velocity.y = hoverSpeedCap;
+
                 hoverTimer += Time.deltaTime;
                 
                 if (hoverTimer > hoverTime)
                 {
                     canHover = false;
                 }
+            }
+            else
+            {
+                acceleration.y = gravity;
+                animator.SetBool("isHovering", false);
             }
         }
         else
