@@ -7983,6 +7983,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Berserker (green)
       objectReference: {fileID: 0}
+    - target: {fileID: 778986903804548025, guid: 1b4ae5fb20a9d60489806adbe3589a4e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b4ae5fb20a9d60489806adbe3589a4e, type: 3}
 --- !u!1001 &3530439235339479081
@@ -8308,6 +8313,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Shooter (green)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6587810691106521177, guid: f930c320b3942e749a624620a1931798,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f930c320b3942e749a624620a1931798, type: 3}

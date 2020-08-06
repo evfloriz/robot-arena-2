@@ -47,6 +47,20 @@ public class PlayerMovement : MonoBehaviour
 
     private float gravity;
 
+    private float dashInputTimer = 0.0f;
+    private float dashReleaseTimer = 0.0f;
+    private float dashInputTime = 0.1f;
+    private float dashReleaseTime = 0.1f;
+    private bool canDash = false;
+    private float dashDir = 0.0f;
+    private float dashTimer = 0.0f;
+    public float dashTime = 0.1f;
+    public float dashSpeed = 15.0f;
+    private bool dashInputFlag = false;
+    private bool dashReleaseFlag = false;
+    private float oldDashDir = 0.0f;
+
+
     
     
 
@@ -131,6 +145,68 @@ public class PlayerMovement : MonoBehaviour
         //Debug.Log(jumpInput);
         //Debug.Log(isGroundedNextFrame);
 
+        // dash input
+        // it's a bit hacky, will want to revisit
+
+        // if input is pressed down, start the timer
+        // else keep the timer at 0
+        if (inputAxis != 0.0f)
+        {
+            dashInputTimer += Time.deltaTime;
+            
+            // cap it so it doesn't go to infinity
+            if (dashInputTimer > dashInputTime)
+            {
+                dashInputTimer = dashInputTime;
+            }
+
+            dashDir = inputAxis;
+
+            // if release timer is valid, execute a dash in the input direction
+            if (//dashInputTimer < dashInputTime && dashInputTimer > 0.0f &&
+                dashReleaseTimer < dashReleaseTime && dashReleaseTimer > 0.0f &&
+                oldDashDir == dashDir)
+            {
+                canDash = true;
+                //Debug.Log(dashInputTimer);
+                //Debug.Log(dashReleaseTimer);
+            }
+
+            dashReleaseTimer = 0.0f;
+            dashInputFlag = false;
+
+            // Debug.Log(dashInputTimer);
+        }
+        else
+        {
+            // if move input was only pressed a short amount of time, start the release timer
+            if (dashInputTimer < dashInputTime && dashInputTimer > 0.0f)
+                dashInputFlag = true;
+            
+            if (dashInputFlag)
+            {
+                dashReleaseTimer += Time.deltaTime;
+
+                oldDashDir = dashDir;
+                
+
+                // cap it
+                if (dashReleaseTimer > dashReleaseTime)
+                {
+                    dashReleaseTimer = dashReleaseTime;   
+                }
+            }
+
+            dashInputTimer = 0.0f;
+            
+        }
+
+        
+        Debug.Log(dashInputFlag);
+
+        //if (canDash)
+        //    Debug.Log(canDash);
+
 
         
 
@@ -142,6 +218,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (playerManager.HoverObtained())
             UpdateHoverMovement();
+
+        if (playerManager.DashObtained())
+            UpdateDashMovement();
 
         rb.MovePosition(rb.position + movement);        
     }
@@ -342,5 +421,23 @@ public class PlayerMovement : MonoBehaviour
 
         //Debug.Log(canHover);
         
+    }
+
+    void UpdateDashMovement()
+    {
+        if (canDash)
+        {
+            velocity.x = dashDir * dashSpeed;
+            velocity.y = 0.0f;
+
+            dashTimer += Time.deltaTime;
+
+            if (dashTimer > dashTime)
+            {
+                dashTimer = 0.0f;
+                canDash = false;
+            }
+        }
+            
     }
 }

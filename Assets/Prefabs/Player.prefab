@@ -184,6 +184,8 @@ MonoBehaviour:
   hoverTime: 0.5
   hoverSpeedCap: 5
   hoverAcceleration: 25
+  dashTime: 0.1
+  dashSpeed: 15
 --- !u!114 &697723412452765492
 MonoBehaviour:
   m_ObjectHideFlags: 0
